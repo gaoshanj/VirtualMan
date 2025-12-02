@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirtualMan - AI 虚拟人问答</title>
+    <link href="./styles.css" rel="stylesheet">
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+    <script src="./app.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="avatar-section">
+    <h1>VirtualMan</h1>
+    <div class="video-container">
+      <video id="remoteVideo" playsinline autoplay></video>
+      <div class="subtitles" id="subtitles"></div>
+    </div>
+    <div class="controls">
+      <button id="startSession" onclick="startSession()">开始对话</button>
+      <button id="stopSession" onclick="stopSession()" disabled>停止对话</button>
+      <button id="stopSpeaking" onclick="stopSpeaking()" disabled style="display:none;">停止讲话</button>
+    </div>
+    <div id="status" class="status" aria-live="polite" style="padding:10px 16px; font-size:14px; color:#333;"></div>
+  </div>
+
+  <div class="chat-section">
+    <div id="chatHistory" class="chat-history"></div>
+    <div class="input-area">
+      <input 
+        type="text" 
+        id="messageInput" 
+        placeholder="请输入问题..." 
+        disabled
+        onkeypress="if(event.key==='Enter') sendMessage()"
+      />
+      <button id="send" onclick="sendMessage()" disabled>发送</button>
+      <button id="micBtn" onclick="toggleMic()" title="语音输入 (点击开始/停止)" disabled style="margin-left:6px;">🎤</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
