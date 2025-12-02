@@ -3,7 +3,22 @@
 var avatarSynthesizer;
 var peerConnection;
 var messages = [];
-var backendUrl = 'http://localhost:8000';
+// 后端地址优先使用 index.html 中设置的 window.BACKEND_URL（部署到 Azure Static Website 时设置为后端公开 HTTPS 地址）
+var backendUrl = (typeof window !== 'undefined' && window.BACKEND_URL) ? window.BACKEND_URL : 'https://vm-backend.azurewebsites.net/';
+
+// 如果页面在 HTTPS 下，而后端为 HTTP，会被浏览器阻止（混合内容）。提醒用户并在控制台打印说明。
+try {
+    if (window.location && window.location.protocol === 'https:' && backendUrl && backendUrl.startsWith('http:')) {
+        console.warn('当前页面使用 HTTPS，但后端地址为 HTTP。浏览器会阻止混合内容请求。请将后端部署为 HTTPS，并在 index.html 中将 window.BACKEND_URL 设置为 HTTPS 地址。');
+        const statusDiv = document.getElementById('status');
+        if (statusDiv) {
+            const p = document.createElement('div');
+            p.textContent = '警告：页面为 HTTPS，但后端为 HTTP，网络请求会被浏览器阻止。请使用 HTTPS 后端。';
+            p.className = 'status-warn';
+            statusDiv.appendChild(p);
+        }
+    }
+} catch (e) {}
 var recognizer = null;
 var isRecognizing = false;
 var currentAuthToken = null;
