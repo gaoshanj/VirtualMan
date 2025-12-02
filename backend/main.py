@@ -79,6 +79,12 @@ def get_config():
     }
 
 
+@app.get("/health")
+def health_check():
+    """Simple health check for load balancers / App Service."""
+    return {"status": "ok"}
+
+
 @app.post("/ask")
 def ask(req: AskRequest):
     if not (AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_KEY and AZURE_OPENAI_DEPLOYMENT):
