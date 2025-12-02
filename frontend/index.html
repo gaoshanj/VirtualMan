@@ -6,6 +6,15 @@
     <title>VirtualMan - AI 虚拟人问答</title>
     <link href="./styles.css" rel="stylesheet">
     <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+    <!--
+      在将静态站点托管到 Azure Static Website 时，请将下面的 window.BACKEND_URL 设置为你的后端公开地址（推荐 HTTPS），
+      例如: window.BACKEND_URL = 'https://api.yourdomain.com';
+      如果不设置，前端会回退到本地开发地址 `http://localhost:8000`。
+    -->
+    <script>
+      // 可被部署时替换或注入的后端地址
+      window.BACKEND_URL = 'https://vm-backend.azurewebsites.net/' || null;
+    </script>
     <script src="./app.js"></script>
 </head>
 <body>
