@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
 from dotenv import load_dotenv
+import logging
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
@@ -83,6 +85,27 @@ def get_config():
 def health_check():
     """Simple health check for load balancers / App Service."""
     return {"status": "ok"}
+
+
+# 尝试挂载 frontend 目录作为静态站点（当部署包包含 frontend 文件时）
+try:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+    if os.path.exists(FRONTEND_DIR):
+        # 将静态文件挂载到根路径。因为 API 路由已经声明过了，API 请求会优先匹配。
+        app.mount('/', StaticFiles(directory=FRONTEND_DIR, html=True), name='frontend')
+        logger.info('Mounted frontend static files from %s', FRONTEND_DIR)
+    else:
+        logger.info('Frontend directory not found at %s; skipping static mount', FRONTEND_DIR)
+except Exception as e:
+    # 不要因为挂载失败阻止应用启动
+    try:
+        logger
+    except Exception:
+        pass
+    print('Warning: failed to mount frontend static files:', e)
 
 
 @app.post("/ask")
