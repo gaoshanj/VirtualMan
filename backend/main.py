@@ -135,7 +135,7 @@ def ask(req: AskRequest):
     # Call Azure OpenAI (chat completion)
     openai_url = f"{AZURE_OPENAI_ENDPOINT}/openai/deployments/{AZURE_OPENAI_DEPLOYMENT}/chat/completions?api-version=2025-01-01-preview"
     headers = {"Content-Type": "application/json", "api-key": AZURE_OPENAI_KEY}
-    payload = {"messages": [{"role": "system", "content": [{"type":"text","text":"你是一个微软认证培训师。你只能使用不超过100个字来回复学员的信息。"}]},{"role": "user", "content": req.question}]}
+    payload = {"messages": [{"role": "system", "content": [{"type":"text","text":"你是微软认证培训师。仅用不超过100字回复学员信息，限微软技术知识。如涉及非微软相关内容，委婉告知无法作答。"}]},{"role": "user", "content": req.question}]}
 
     try:
         r = requests.post(openai_url, headers=headers, json=payload, timeout=30)
